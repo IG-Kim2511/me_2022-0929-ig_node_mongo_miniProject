@@ -350,26 +350,26 @@ MongoClient.connect(url, function(mongo_err, client) {
   });
    
 
-  //🦄🦄c70 검색기능3 mongoDB사이트...search index탭, $.parma(~), $("#form").serialize(~), aggregate(~), $search, $sort,$limit, $project, {$meta:"searchScore"}
+  //🦄🦄c70 mongoDB...search index탭, $.parma(~), $("#form").serialize(~), aggregate(~), $search, $sort,$limit, $project, {$meta:"searchScore"}
   // 👉mongoDB사이트  collection 👉 index
-  // 👉 mongoDB사이트...search index탭 활용함
+  // 👉 mongoDB사이트...search index탭 
 
     app.get('/search_c70',(req,res)=>{
 
       console.log(('get./search_c70').bgBrightMagenta)
       console.log(req.query.value)
 
-      //  🍀70-15) .find(검색조건).toArray()
+      //  🍀70-15) .find(pipeline).toArray()
       // 👉mongoDB사이트  collection 👉 index
       // {title:req.query.value} : full scan하는 이전 방법 
 
       // 🍀실패함 {$text:{ $search: req.query.value}}
       
-      //  🍀70-20) .aggregate(검색조건).toArray()  
+      //  🍀70-20) .aggregate(pipeline).toArray()  
       // 👉 mongoDB사이트...search index탭 활용함      
 
 
-      let 검색조건 =[
+      let pipeline =[
         {
           $search:{
             index : "ig_titleSearch",
@@ -384,7 +384,7 @@ MongoClient.connect(url, function(mongo_err, client) {
         {$limit : 10},
         {$project : {title : 1, date:1, _id: 0, score :{$meta : "searchScore"}}}
       ];
-      db.collection('post').aggregate(검색조건).toArray((err,p_db)=>{
+      db.collection('post').aggregate(pipeline).toArray((err,p_db)=>{
         console.log(p_db)  
   
         res.render('search_c70.ejs',{ig_posts:p_db});

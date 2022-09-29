@@ -16,12 +16,13 @@
       <br><br>
 
 
-        <p>c66 간단 search</p>
+      <div>
+        <h2>mongodb search index</h2>
         <input type="text" id="search-input">
+        <!-- 👉js 66 -->
         <button id="search" class="myBtn">search</button>
       </div>
-      
-   
+    
       <br>
       <section>
           <h2>🍀c32. 서버에서 가져온 할일 리스트</h2>
@@ -42,19 +43,17 @@
               <p>할일 마감날짜 : <%= item.date %></p> 
               
               <!-- 🍀c42 -->
+              <!-- 👉js 42 -->
               <button class="myBtn delete" data-id="<%= item._id %>">Delete</button>
               
+              <!-- 👉js 72 -->
               <button class="myBtn delete_c72" data-id="<%= item._id %>">delete_c72</button>
       
               <!-- 🍀c48 href="http://localhost:3000/detail/<%= item._id %>"-->
               
               <a class="myBtn detail"  data-id="<%= item._id %>" href="/detail/<%= item._id %>">Detail page</a>              
             </div>
-          <%  })  %>  
-          
-    
-
-        
+          <%  })  %>    
 
       </section>
 
@@ -87,7 +86,7 @@
 
 
     // 🦄c72
-    $('.delete').click((e)=>{
+    $('.delete_c72').click((e)=>{
         $.ajax({
           method: "DELETE",
           url: "/delete_c72",
