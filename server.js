@@ -371,7 +371,7 @@ MongoClient.connect(url, function(mongo_err, client) {
 
     app.get('/search_c70',(req,res)=>{
 
-      console.log(colors.bgBrightMagenta('get./search_c70'))
+      console.log(('get./search_c70').bgBrightMagenta)
       console.log(req.query.value)
 
       //  🍀70-15) .find(검색조건).toArray()
