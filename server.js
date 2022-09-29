@@ -28,32 +28,24 @@ app.use(express.static('public'))
 let methodOverride = require('method-override')
 app.use(methodOverride('_method'))
 
+// 🍀c58-10)
+// passport
+const passport = require('passport');
+
+// passport-local
+const LocalStrategy = require('passport-local').Strategy;
+
+// express-session
+const session = require('express-session');
+
+// middleware
+app.use(session({ secret: 'ig123', resave: true, saveUninitialized: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 /* 
   🍀me - next 수업에 나올 상단 코드 정리
-
-  // c30)
-  const MongoClient = require('mongodb').MongoClient;
-
-  // c32) 
-  app.set('view engine', 'ejs');
-
-  // c50)  static 파일 보관위해 public폴더 쓸거라는 뜻
-  app.use('/public_c50', express.static('public_c50'));
-
-  // c52)  method-override
-  var methodOverride = require('method-override');
-  const passport = require('passport');
-  app.use(methodOverride('_method'))
-
-  // 🍀c58-10)
-  // const passport = require('passport');
-  const LocalStrategy = require('passport-local').Strategy;
-  const session = require('express-session');
-
-  app.use(passport.initialize());
-  app.use(passport.session());
-  app.use(session({ secret: 'ingyum123', resave: true, saveUninitialized: false }));
-
 
   // c64) .env 파일, environment variable, 
   // root folder에 .env파일 만들때 : require('dotenv').config()
@@ -68,31 +60,9 @@ app.use(methodOverride('_method'))
 app.use('/', require('./routes/routes.js'))
 
 
-// 6) css 적용하기 (me...구글검색) ⚡
+// 🦄🦄c28. MongoClient.connect(url, function(err, client) {~~} 
 
-app.get("/style.css", function (req, res) {
-  res.sendFile(__dirname + "/style.css");
-});
-
-
-// 🦄🦄c24 POST요청 app.post('/add',(res,req)=>{}), body-parser(POST요청으로 서버에 데이터 전송 쉽게해주는 라이브러리 : body-parser, form, input, name)
-// 👉write.html
-console.log('🦄🦄🦄🦄c9')
-
-app.get("/write", function (req, res) {
-    //res.send('ig node server')
-    // res.sendFile(__dirname + "/write.html");
-
-    res.render('write.ejs')
-});
-
-
-
-// 🦄🦄c28. mongoDB 셋팅, MongoClient.connect(url, function(err, client) {~~} 
-// 👆server.js 상단에 코드 추가
-
-// 🦄🦄c30 Database에 자료 저장하기, client.db('작명').collection('작명').insertOne(자료오브젝트, 콜백함수)
-
+// 🦄🦄c30 Database, client.db('').collection('').insertOne(, )
 
 // url, password
 let url = process.env.mongoDB_url;
@@ -103,133 +73,56 @@ MongoClient.connect(url, function(mongo_err, client) {
 
   let db = client.db('db0929')
 
-  // 🦄🦄c32 npm ejs 1, ejs 파일 만들기
+  // 🦄🦄c32 npm ejs 1
   // 👉write.ejs
-  /* 
-    🦄 누군가 /add 경로로 POST 요청을 하면, 폼에 입력된 자료를 2개가 서버로 도착합니다.
-      이 때 자료 2개를 ~~라는 이름의 collection에 저장하기
-  */
 
   // 🍀post, bodyParser
-  //  post()를 통한 insetOne()실행, send(), req.body.ig_title
+  //  post() insetOne(), send(), req.body.ig_title
   app.post('/add',function (req,res) {    
-    // res.send('/add, 전송완료')
-    // res.sendFile(__dirname + "/write.html");
+
     res.render('write.ejs')
 
-
-    console.log('add fin')
-
+    console.log('post-add fin'.bgMagenta)
     console.log(req.body)
     console.log(req.body.ig_title)
 
-
-    // 🦄🦄c38 게시물마다 id넣기, auto increment문법, findOne(.), insertOne(.)
-    /*    
-      2) ex)그냥 단순하게 "id:총게시물갯수+1"하면 2번째 자료(id:2)를 지우고, 새로운 데이터를 넣었을때 id:2가 되는 상황이 발생함
-      이렇게 되면 안됨, 
-      지우고 새로운거 넣어도 id:2는 공백이 되어야 함
-      
-      4) find() : 모든 데이터 찾고싶을때
-      findOne() : 원하는 데이터 1개만 찾고싶을때  
-
-      findOne({~},function(){}) : {~}가 있는 오브젝트 뭉치를 찾아줌, 그 오브젝트 안의 데이터들을 수정할 예정
-      
-      ~~collection(~)~~.findOne({~~{}~~},function(){
-        ~~~~ 수정할 코드~~~
-      })
-
-
-      🍄6) /add로 post요청하면, 
-      DB의 총게시물갯수 데이터 가져오셉
-      
-      🍄8) 새로운 collecton 만듬
-      -> 여기에 자료갯수를 저장해서 꺼냈는 방식을 사용할 예정
-      default로 데이터 만들어두고, 게시물 만들어질때마다 totalPost숫자 늘리는 방식을 사용할 예정
-    */
-
+    // 🦄🦄c38  id, auto increment, findOne(.), insertOne(.)
+   
     // 🍀c38.findOne, total count    
-    // .collecton(~) : ....'~' 에 연결, collecton이름 여기에 작명하면, mongoDB에 자동으로 그 collecton 만들어짐
+    // .collecton(~) :
     db.collection('counter').findOne({name:'total post count'},function (p_err,pp_res) {
       console.log(pp_res)
       console.log(pp_res.totalPost)
       
       // 🍀insertOne, _id: pp_res.totalPost+1
-      // .insertOne(~) : .insertOne(저장할 데이터, 그 이후 실행할 콜백함수)  👉 mongoDB에 가면 저장된 데이터 확인됨
       db.collection('post').insertOne({_id:pp_res.totalPost+1,title: req.body.ig_title, date:req.body.ig_data },function (){
-        console.log('insertone success'.blue)      
-
-
-                
-        // 🦄🦄c40 게시물마다 id넣기2 - id에 +1하기, updateOne(.), mongodb operator $inc $set 
-        console.log('🦄🦄c40')  
-        /*
-          10) updateOne({},{},function(){}) : 하나의 데이터 수정
-          updateMany() : 한번에 많은 데이터 수정
-
-          20-10) post()할때, 
-          findOne() :  collection('~~')에서 name:'게시물갯수'데이터를 가지고있는 오브젝트 전체를 가져옴 (ex: collection(counter)의 오브젝트)
-          collection("~~")에 insertOne : collection("~~")에  그 db결과의 totalPost에 +1을 해서 _id만듬
-
-          20-20) post()할 때 + collection('~~') 에 insertOne할때 : 
-          updateOne() : collection('~~')에서 " name:게시물갯수"데이터를 가진 오브젝트 전체를 가져옴. 
-          그안의 데이터 하나(ex: totalPost) 를 수정함 (ex: totalPost+1)
-
-          30) $inc : number data에 +, - 시킴
-          양수, 음수 둘다 가능함
-          +1 : +1 해줌
-          -1 : -1 해줌
-
-
-          30-2) mongodb update operators : 
-          https://www.mongodb.com/docs/manual/reference/operator/update/
-        */
-
-        // 🦄🦄 40 게시물마다 id넣기2 - id에 +1하기, updateOne(.), mongodb operator $inc $set 
+        console.log('insertone success'.bgBlue)         
+    
+        // 🦄🦄c40 id+1, updateOne(.), mongodb operator $inc $set 
         // 🍀c40.updateOne, $inc:{totalPost:1}
         db.collection('counter').updateOne({name:'total post count'},{$inc:{totalPost:1}},function (PPP_err,ppp_res) {
           if (PPP_err) {
             return console.log(PPP_err)            
-          } 
-          
+          }           
         });
       })
     });
   })
+  
 
-  //🦄🦄c34 HTML에 DB데이터 넣는 법 2 (DB데이터 읽기), .find(.).toArray(에러,결과)={}), { posts  결과 }
+  //🦄🦄c34 find(.).toArray(,)={}), { posts   }
   // 👉list.ejs
-
-  /* list.ejs 파일안 코딩
-        <!-- 🦄c34 반복문     <%  %>   
-            for (let i = 0; i < array.length; i++) {
-                array[i];              
-            }        
-        -->
-        
-        <%    for (let i = 0; i < ig_posts.length; i++) {   %>  
-          <h4>할일 제목 : <%= ig_posts[i].제목 %></h4>
-          <p>할일 마감날짜 : <%= ig_posts[i].날짜 %></p>          
-        <%  }  %>        
-  */    
-  /*
-      2).find().toArray() 라고 적으시면 collection(‘post’)에 있는 모든 데이터를 Array 자료형으로 가져옵니다. 
-
-      4)list.ejs 파일을 렌더링함과 동시에 {ig_posts: 결과} 라는 데이터를 함께 보내줄 수 있습니다. 
-      (정확히 말하면 결과라는 데이터를 ig_posts 라는 이름으로 ejs 파일에 보내주세요~ 입니다)
-  */
-
       
   // 🍀c34. list
   app.get("/list", function (req, res) {
 
     // find().toArray()
-    db.collection('post').find().toArray(function (err,p_db결과) {
-      console.log(p_db결과)
+    db.collection('post').find().toArray(function (err,p_db) {
+      console.log(p_db)
       
       // ejs
       //res.render
-      res.render('list.ejs',{ig_posts:p_db결과,ig_title:req.params.id});
+      res.render('list.ejs',{ig_posts:p_db,ig_title:req.params.id});
     })
 
   });
@@ -249,12 +142,10 @@ MongoClient.connect(url, function(mongo_err, client) {
   });
 
 
-  // 🦄🦄c42 AJAX로 DELETE 요청하기1, $.ajax(.), app.delete('delete',(.)={})
-  // 🦄🦄c44 AJAX로 DELETE 요청하기2, deleteOne(.), data-~~, .dataset.~~, parseInt(.)
-  // 🦄🦄c46 AJAX로 DELETE 요청하기3, jQuery기능 .status(~).send(~)
-  console.log('🦄🦄c42,44,46')
+  // 🦄🦄c42 AJAX로 DELETE , $.ajax(.), app.delete('delete',(.)={})
+  // 🦄🦄c44 deleteOne(.), data-~~, .dataset.~~, parseInt(.)
+  // 🦄🦄c46 .status(~).send(~)
 
-  //c44) 🍄req요청.body에 담겨온 id를 가진 오브젝트를 db에서 찾아서, 삭제
   // 👉./views/list.ejs
 
   // 🍀c42, delete
@@ -264,46 +155,33 @@ MongoClient.connect(url, function(mongo_err, client) {
     console.log(req.body)
 
     /*🍀
-      "req요청.body.~id"를 number로 바꿈  -> "req요청.body"를 deleteOne()에 사용함. 
-      ("req요청.body._id"  가 아니라. "req요청.body") 
+      "req.body.~id"를 number로 바꿈  -> "req.body"를 deleteOne()에 사용함. 
+      ("req.body._id"  가 아니라. "req.body") 
     */
     req.body._id = parseInt(req.body._id);
 
     // ~.deleteOne()
     db.collection('post').deleteOne(req.body, function (pp_err, pp_res) {
-         console.log('ig delete fin')
+         console.log('ig delete fin'.bgBlue)
 
-      // c46-30) 성공코드 200:  res응답.status(200).send({message : "c46, success"});  
+      // c46-30)  200:  res.status(200).send({message : "c46, success"});  
       // 👉 list.ejs
       res.status(200).send({message:"ig delete fail"});
 
-      // c46-40) 실패코드 400:  res응답.status(400).send({message : "c46, fail"});        
-      // res응답.status(400).send({message : "c46, fail"});
+      // c46-40)  400:  res.status(400).send({message : "c46, fail"});        
+      // res.status(400).send({message : "c46, fail"});
     })
     
   });
 
 
-  // 🦄🦄c48 상세페이지를 만들어보자 id (URL parameter), req요청.params.id
+  // 🦄🦄c48 id (URL parameter), req.params.id
   // 👉/views/detail.ejs
   
-  /* 
-    🍀목표: /detail로 접속하면 detail.ejs 보여주기 
-
-    -2) :id : URL parameter
-    = req요청.params.id  = 'detail/:id'
-
-    -4)findOne({~},function(){}) : {~}가 있는 오브젝트 뭉치를 찾아줌
-
-    -6) parseInt() :  db의 id는 int인데, 코드를 확인하면 string으로 나옴 -> parseInt()붙여서 number로 만듬
-    팁: 마우스를 hover하면 JavaScript type을 알려줌
-
-    -8).render('~c~',{ ~b~ : ~a~ }) : ~a~데이터를, ~b~이름으로,  ~c~~로 보냄,
-  */
   // :id
   app.get('/detail/:id',function (req,res) {
 
-    //  req요청.params.id 
+    //  req.params.id 
     // findOne({~},function(){})
     // parseInt 
     db.collection('post').findOne({_id: parseInt(req.params.id)},function (pp_err,p_res) {
@@ -316,62 +194,25 @@ MongoClient.connect(url, function(mongo_err, client) {
 
 
 
-  // 🦄🦄c50 ejs include 문법(= react components), static파일, express.static('public') 
-  // 👉상단코드) app.use('.public', express.static('pulbic'));
+  // 🦄🦄c50 ejs include (= react components), static, express.static('public') 
+  // 👉 app.use('.public', express.static('pulbic'));
   //  👉 ./views/nav.html 
   // 👉./views/~~~.ejs
 
-  /* 
-    2)
-    👉./public/style.css 만들기
 
-      static files는 public폴더안에 보관하는게 관습
-      CSS파일이 여기에 해당됨
-      (static files : 데이터에 의해 변하지 않는 파일) 
-
-    4) 👉상단코드) app.use('.public', express.static('pulbic'));
-    static 파일 보관위해 public폴더 쓸거라는 뜻
-
-    6) 👉 ./views/nav.html 만들기
-
-      공유할 html 파일 : 
-      views폴더
-      html형식  (ejs X)
-      
-      적용은 ~.ejs파일에만 적용가능함
-  
-    8)👉./views/~~~.ejs에 삽입하기
-
-      여기 이자리에 nav_c50.html을 넣을수있음
-      <%- include('nav_c50.html') %>  
-
-    10)
-      👉./views/index.ejs 파일변경, 폴더이동.. 
-      👉./views/write.ejs 파일변경, 폴더이동.. 
-  
-    app.listen(3000, function(){
-        console.log('c30 listening on 3000')
-      });
-  */
-
-
-  // 🦄🦄c52 글 수정 =PUT=update, html에서 PUT요청하기, method-override 
+  // 🦄🦄c52 =PUT=update,  PUT, method-override 
   // 👉update.ejs, update-id.ejs
-  /* 
-    1 'update' - 'update-id'페이지 따로만듬
-    2. app.get()도 따로 만듬
-    에러없이 정상작동됨
-  */
+
   app.get("/update", function (req, res) {
     res.render('update.ejs')
   });
 
   // 🍀 /update/:id
   app.get("/update/:id", function (req, res) {
-    db.collection('post').findOne({_id: parseInt(req.params.id)},function (pp_err, p_db결과) {    
+    db.collection('post').findOne({_id: parseInt(req.params.id)},function (pp_err, p_db) {    
         
-      console.log(p_db결과)
-      res.render('update-id.ejs',{ig_post: p_db결과})      
+      console.log(p_db)
+      res.render('update-id.ejs',{ig_post: p_db})      
     })
   });
 
@@ -385,42 +226,25 @@ MongoClient.connect(url, function(mongo_err, client) {
     db.collection('post').updateOne({_id:parseInt(req.body.ig_id)},{$set:{title: req.body.ig_title, date: req.body.ig_date}},function (p_err, p_res) {
       console.log('ig- update- fin')
 
-      // 🍀redirect
-      // res.render('list.ejs'); 로 하면 에러남 (왜인지는 모름)
+      // 🍀redirect     
       res.redirect('/list');
     })
   });
 
 
-  // 🦄🦄c56 (회원 로그인0) 세션, JWT, OAuth 등 회원인증 방법 이해하기
-  // 🦄🦄c58 (회원 로그인1) 미들웨어, app.use(~), passport, express-session, passport.authenticate(~), passport.use(new LocalStorategy(~))
-  // 🦄🦄c60 (회원 로그인2) passport-local, passport.serializeUser(~), bcryptjs
-  // 🦄🦄c62 (회원 로그인3) mypage.ejs, middleware로그인확인, passport.deserializeUser, req.user: db의 데이터
+  // 🦄🦄c58  app.use(~), passport, express-session, passport.authenticate(~), passport.use(new LocalStorategy(~))
+  // 🦄🦄c60  passport-local, passport.serializeUser(~), bcryptjs
+  // 🦄🦄c62  mypage.ejs, middleware로그인확인, passport.deserializeUser, req.user: db의 데이터
+  // 👉 up
   // 👉mypage.ejs
   // 👉login_c58.ejs
 
   console.log('🦄🦄c56,58,60,62')
 
-  // 🍀c58-10)
-  // passport
-  const passport = require('passport');
-
-  // passport-local
-  const LocalStrategy = require('passport-local').Strategy;
-
-  // express-session
-  const session = require('express-session');
-
-  // middleware
-  app.use(session({ secret: 'ig123', resave: true, saveUninitialized: false }));
-  app.use(passport.initialize());
-  app.use(passport.session());
-
 
   app.get('/login',(req,res)=>{
     res.render('login_c58.ejs');
   });
-
 
   app.get('/login_fail',function (req,res) {
     res.render('login_fail.ejs')    
@@ -431,14 +255,14 @@ MongoClient.connect(url, function(mongo_err, client) {
   /*🍀-20)
     passport.authenticate('local') : (인증해주세요)함수 ,    
     인증 실패시 (failureRedirect : '/fail') :  '/login_fail' 로 연결 
-    인증 성공시 : res응답.redirect('/') 
+    인증 성공시 : res.redirect('/') 
   */
   app.post('/login', 
     passport.authenticate('local', { failureRedirect: '/login_fail' }),
     function(req, res) {
       console.log('🦄c58. login')
       res.redirect('/');
-    });
+  });
 
 
   // 🍀passport-local
@@ -450,118 +274,74 @@ MongoClient.connect(url, function(mongo_err, client) {
     session: true,                       // login 후 session을 저장할것인지?
     passReqToCallback:false,
     },
-    function(입력한username, 입력한password, done) {
-      db.collection('login').findOne({ id: 입력한username }, function (err, user정보) {
+    function(username, password, done) {
+      db.collection('login').findOne({ id: username }, function (err, user) {
 
         console.log(colors.bgYellow('passport.use(new LocalStrategy'))            
-        console.log(입력한username,입력한password)
-        console.log(user정보)
-
-        /*-40)
-          error처리
-          DB에 ID가 없을때
-          DB에 ID가 있을때
-          DB에 ID가 있으면, input password == DB password 비교함
-
-          -50)
-          done: 3개의 argument를 가짐
-          done(서버에러, 성공시 사용자 db데이터, 에러 메시지)
-
-          -60)        
-          입력한 비밀번호를 암호화한 후 ,DB의 비밀번호와 비교해야함 (나중에 알아서 하세요)
-        */
+        console.log(username,password)
+        console.log(user)
 
         if (err) { return done(err); }
-        if (!user정보) { return done(null, false,{message:'존재하지않는 아이디입니다'}); }
-        if (입력한password !== user정보.pw) { 
-          return done(null, false,{message: '비번 틀림'});
+        if (!user) { return done(null, false,{message:'wrong ID'}); }
+        if (password !== user.pw) { 
+          return done(null, false,{message: 'wrong password'});
         }
-        return done(null, user정보,{message:'성공'});
+        return done(null, user,{message:'success log in'});
 
       });
     }
   ));
 
-  // 🍀passport.serializeUser
-  // login 성공 때, id를 이용해서 session을 local에(?) 저장 (session의 id정보를 cookie로 보냄)
-  // 👉f12 -> Application -> Cookies에서 확인
-  passport.serializeUser(function(user정보, done) {
-    console.log(colors.bgYellow('passport.serializeUser'))
-    console.log(user정보)
+  // 🍀passport.serializeUser  
+  // 👉f12 -> Application -> Cookies
+  passport.serializeUser(function(user, done) {
+    console.log(('passport.serializeUser').bgYellow)
+    console.log(user)
 
-    done(null, user정보.id);
+    done(null, user.id);
   });
 
 
   // 🦄c62,  👉mypage.ejs
   // 🍀 passport.deserializeUser
   // login 성공 때, 위의 session데이터를 가진사람(login한 유저)의 정보를 db에서 찾아줌
-  // user정보 : db에서 찾은 정보
+  // user : db에서 찾은 정보
   // p_id : passport.serializeUser에서의 use정보.id
   passport.deserializeUser(function(p_id, done) {
-    db.collection('login').findOne({id:p_id}, function (err, user정보) {
-      done(err, user정보);
+    db.collection('login').findOne({id:p_id}, function (err, user) {
+      done(err, user);
     });
   });
 
   // 🍀62-50. app.get("/mypage",~~~~), 
   // 🍉req.user : db의 데이터
-  app.get("/mypage",middleware로그인확인, function (req, res) {
-    console.log(colors.bgBrightYellow(`/mypage : req.user`))
+  app.get("/mypage",loginCheck, function (req, res) {
+    console.log((`/mypage : req.user`).bgYellow)
     console.log(req.user)
     res.render('mypage_62.ejs',{ig_mypage유저정보: req.user})
   });
 
-  //🥒62-50. middleware로그인확인
+  //🥒62-50. loginCheck
   // req.user가 있으면 next() : 통과  👉app.get("/mypage",~~~~실행
   // req.user가 없으면 res.render(~~)  (html에 메시지 띄움)
-  function middleware로그인확인(req,res,next) {
+  function loginCheck(req,res,next) {
     if (req.user) {
-      console.log(colors.bgBrightGreen('middleware로그인확인'))
+      console.log(colors.bgBrightGreen('loginCheck'))
       next()    
     } else {
-      // res.send('로그인 안했습니다.');    
       res.render('login_fail.ejs')    
     }  
   }
 
 
-
-  // 🦄🦄c64 .env 파일, environment variable, 가변적인 변수 데이터들 관리하기 
+  // 🦄🦄c64 .env 파일, environment variable, 
   // 👉.env  
   console.log('🦄🦄c64 ')
 
 
-  /* 
-    🍀 npm install dotenv
-
-    🍀 👉상단코드 : 
-      root folder에 .env파일 만들때 : require('dotenv').config()
-      다른 folder(env_c64)에 .env파일 만들때 : require('dotenv').config({path: "./env_c64/.env"})
-    
-    🍀 server.js와 같은 폴더에 '.env'파일 만듬
-    👉.env  
-  */
-
-
-  //🦄🦄c66 검색기능1 Query string parameters, ('/search?value='+입력한value), req.query.value, window.location.replace('/~')
+  //🦄🦄c66  Query string parameters, ('/search?value='+입력한value), req.query.value, window.location.replace('/~')
   // 👉views/list.ejs : html, javascript 
   
-
-
-  /* 
-    🍀c66) Query string parameters : 
-    b 검색하면 url뒤로 몰래 정보를 전달함
-    ? ~~a~~ = ~~b~~
-
-    🍀c66-20) server.js에서 query string꺼내씀, DB에서 데이터 꺼냄. 
-
-    -a) req요청.query : get함수에서 요청.body 쓰는것과 비슷하게 사용하는 방식임
-
-    -b)
-      collection().findOne()           : 1개 찾을 때
-      collection().find().toArray()     : 여러개 찾을 때
-    */
   app.get('/search_c68',(req,res)=>{
     
     // 🥒req.query 
@@ -569,24 +349,17 @@ MongoClient.connect(url, function(mongo_err, client) {
     console.log(req.query.value)
 
      // 🥒 collection().find().toArray()  
-    // find({제목:req요청.query.value})  👉 문제점: 정확히 일치하는 것만 찾아줌
-    db.collection('post').find({title:req.query.value}).toArray((p_err,p_db결과)=>{
+    // find({제목:req.query.value})  
+    db.collection('post').find({title:req.query.value}).toArray((p_err,p_db)=>{
       
       console.log(colors.bgBrightMagenta('get./search_c68'))
-      console.log(p_db결과)
+      console.log(p_db)
 
   
       //🦄🦄c68 검색기능2 mongoDB사이트...index탭, Binary Search, 
       // 👉views/👉search_c68.ejs
 
-      /*
-        🍀-30) 👉mongoDB사이트  collection 👉 index
-        가나다라 정렬
-        오름차순, 내림차순
-        동시에 여러개 설정가능함      
-      */
-
-      res.render('search_c68.ejs',{ig_posts:p_db결과});
+      res.render('search_c68.ejs',{ig_posts:p_db});
 
     })
   });
@@ -596,66 +369,27 @@ MongoClient.connect(url, function(mongo_err, client) {
   // 👉mongoDB사이트  collection 👉 index
   // 👉 mongoDB사이트...search index탭 활용함
 
-  /* 
-    🍀70-2) me: okky처럼 구글로 검색이동시키는 방법도 있음, 
-  */
-
-
-    app.get('/search_c70',(req요청,res응답)=>{
+    app.get('/search_c70',(req,res)=>{
 
       console.log(colors.bgBrightMagenta('get./search_c70'))
-      console.log(req요청.query.value)
+      console.log(req.query.value)
 
       //  🍀70-15) .find(검색조건).toArray()
       // 👉mongoDB사이트  collection 👉 index
-      // {title:req요청.query.value} : full scan하는 이전 방법      
-      /*      
-        db.collection('post').find({title:req요청.query.value}).toArray((P_err,p_db)=>{
-          console.log(p_db)
-          res응답.render('search_c70.ejs',{ig_posts:p_db});
-        }); 
-      */
+      // {title:req.query.value} : full scan하는 이전 방법 
 
-
-      // 🍀실패함 {$text:{ $search: req요청.query.value}}
-      /*  
-        db.collection('post').find({$text:{ $search: req요청.query.value}}).toArray((P_err,p_db)=>{
-          console.log(p_db)
-          res응답.render('search_c70.ejs',{ig_posts:p_db});
-        }); 
-      */
-
-
+      // 🍀실패함 {$text:{ $search: req.query.value}}
       
       //  🍀70-20) .aggregate(검색조건).toArray()  
       // 👉 mongoDB사이트...search index탭 활용함      
-      /* 
-        🍀70-30)
-          $sort : 
-          결과정렬
-          _id 순으로 정렬
-          1, -1 :  오름차순, 내림차순 정렬
 
-          $limit :
-          상위 10개만 가져와주세요...라는 limit
-
-          $project : 검색결과에서 원하는것만 보여줌
-          1 : 검색결과 나옴
-          0 : 검색결과 나오지 않음
-          항목에 넣지않아도, 검색결과 나오지 않는걸..로 알고있음
-
-          searchScore:  검색어와 게시물의 관련석이 높은것, 검색 많이 하는 항목은 score가 높아짐
-
-          score는 collection에 없어도 이런식으로 코딩하면 , 
-          검색결과필터링으로 넣어줌      
-      */
 
       let 검색조건 =[
         {
           $search:{
             index : "ig_titleSearch",
             text:{
-              query: req요청.query.value,
+              query: req.query.value,
               path: ["title",'date']        //db안의 오브젝트 이름
             }  
           }
@@ -665,10 +399,10 @@ MongoClient.connect(url, function(mongo_err, client) {
         {$limit : 10},
         {$project : {title : 1, date:1, _id: 0, score :{$meta : "searchScore"}}}
       ];
-      db.collection('post').aggregate(검색조건).toArray((err,p_db결과)=>{
-        console.log(p_db결과)  
+      db.collection('post').aggregate(검색조건).toArray((err,p_db)=>{
+        console.log(p_db)  
   
-        res응답.render('search_c70.ejs',{ig_posts:p_db결과});
+        res.render('search_c70.ejs',{ig_posts:p_db});
       })       
     });
 
@@ -689,45 +423,45 @@ MongoClient.connect(url, function(mongo_err, client) {
         👉ui로는 삭제되는데, 새로고침해보면 삭제안되고 그대로인걸 확인할 수 있음
     */
 
-    app.get('/register_c72', (req요청,res응답)=>{
-      res응답.render('register_c72.ejs')
+    app.get('/register_c72', (req,res)=>{
+      res.render('register_c72.ejs')
 
     });
     
     //🍀register post하기 : passport~~~ 코드 밑에 코딩해야함
-    app.post('/register_post', (req요청,res응답)=>{
+    app.post('/register_post', (req,res)=>{
       
       console.log(colors.bgBrightMagenta('register_post'))
-      console.log(req요청.body.id)
+      console.log(req.body.id)
 
-      // 🍉insertOne({id:req요청.body.id, pw:req요청.body.pw}, : post로 넘어온 req요청.body.~ 데이터 저장
-      db.collection('login').insertOne({id:req요청.body.id, pw:req요청.body.pw},function (p_err,p_db) {
+      // 🍉insertOne({id:req.body.id, pw:req.body.pw}, : post로 넘어온 req.body.~ 데이터 저장
+      db.collection('login').insertOne({id:req.body.id, pw:req.body.pw},function (p_err,p_db) {
 
         // 🍉redirect
-        res응답.redirect('/');         
+        res.redirect('/');         
       })
     });
 
 
     // 🍀write할때, 로그인 한 작성자도 추가하기 : passport~~~ 코드 밑에 코딩해야함
     // 👉register_c72.ejs
-    app.post('/add_c72',function (req요청,res) {    
+    app.post('/add_c72',function (req,res) {    
       
       console.log((`app.post('/add_c72'`).bgBrightMagenta)  
-      console.log(req요청.body)
-      console.log(req요청.body.ig_title)
+      console.log(req.body)
+      console.log(req.body.ig_title)
 
       res.render('register_c72.ejs')
 
 
       /* 
-        🍀작성자: req요청.user._id        
-          req요청.user._id : 현재 로그인한 사람의 정보
-          req요청.user.pw  : 현재 로그인한 사람의 password
+        🍀작성자: req.user._id        
+          req.user._id : 현재 로그인한 사람의 정보
+          req.user.pw  : 현재 로그인한 사람의 password
       */
-      let 저장할것 = {작성자: req요청.user._id , title: req요청.body.ig_title, date:req요청.body.ig_data}
+      let 저장할것 = {작성자: req.user._id , title: req.body.ig_title, date:req.body.ig_data}
 
-      db.collection('post').insertOne(저장할것,function (p_err, p_db결과) {
+      db.collection('post').insertOne(저장할것,function (p_err, p_db) {
 
         console.log('co0921-saved')        
       })      
@@ -812,8 +546,8 @@ MongoClient.connect(url, function(mongo_err, client) {
       🍀-10) upload.ejs 만듬 : 👉views/upload_c78.ejs
     */
 
-    app.get('/upload',(req요청,res응답)=>{
-      res응답.render('upload_c78.ejs');
+    app.get('/upload',(req,res)=>{
+      res.render('upload_c78.ejs');
     });
 
     /* 
@@ -884,8 +618,8 @@ MongoClient.connect(url, function(mongo_err, client) {
       🍉미들웨어 const upload : upload.single('ig_uploadInput')
       👉./views/upload.ejs의  <input type="file" name="ig_uploadInput"> 의 name="ig_uploadInput"가져옴
     */
-    app.post('/upload',upload.single('ig_uploadInput'),(req요청,res응답)=>{
-      res응답.send('c78_fin');
+    app.post('/upload',upload.single('ig_uploadInput'),(req,res)=>{
+      res.send('c78_fin');
     });
 
     /* 
@@ -895,7 +629,7 @@ MongoClient.connect(url, function(mongo_err, client) {
       
         a) 이름짓기👉 :ig_imageName
 
-          적용 👉 req요청.params.ig_imageName
+          적용 👉 req.params.ig_imageName
 
 
         b) 파일경로 : __dirname +'/public/image_c78'
@@ -906,8 +640,8 @@ MongoClient.connect(url, function(mongo_err, client) {
         <img src="/public_c50/image_c78/test_c78.jpg" alt="">
     */
 
-    app.get('/image_c78/:ig_imageName',(req요청,res응답)=>{
-      res응답.sendFile(__dirname +'/public/image_c78'+ req요청.params.ig_imageName)
+    app.get('/image_c78/:ig_imageName',(req,res)=>{
+      res.sendFile(__dirname +'/public/image_c78'+ req.params.ig_imageName)
     })
 
 
