@@ -62,39 +62,10 @@ app.use(methodOverride('_method'))
 */
 
 
-
-
-
-// 🦄🦄c16 
-console.log('🦄🦄🦄🦄c5')
-
-// 🦄🦄c18
-// 👉 server.js 상단 -  (express) 서버오픈 기본공식  
-// 👉하단 코드 - listen(~)
-
-
 // 🍀route : get, post, put, delete
 
-// 🍀get
-// 사용자가 / 경로로 접속시 (/ 하나만 있으면 홈페이지입니다)
-app.get("/", function (req요청, res응답) {
-  
-  //🍉 send()
-  //res.send('ig node server')
-  
-  // 🍉html
-  // res.sendFile(__dirname + "/index.html");
-
-  //🦄c50. ejs : html과 달리 render(~) 라는거 헷갈리지 말기
-  // 👉index.ejs
-  res응답.render('index.ejs')
-
-});
-
-
-// 🦄🦄c20 html파일전송하기,.sendFile(~), Nodemon, 설치오류해결 powershell관리자모드
-console.log('🦄🦄🦄🦄c20')
-
+// 🍀 app.use(), routes.js
+app.use('/', require('./routes/routes.js'))
 
 
 // 6) css 적용하기 (me...구글검색) ⚡
@@ -800,11 +771,6 @@ MongoClient.connect(url, function(mongo_err, client) {
        🍀 https://expressjs.com/en/guide/routing.html
     */
 
-    // 🍀 app.use(미들웨어)
-    // 👉 ./routes/shop_c74.js
-    //  ./rountes/shop_c74.js 파일을 여기에 첨부
-    app.use('/', require('./routes/shop_c74.js'))
-    
     
     //🍉 /shop2 
     // 👉 ./routes/shop2_c74.js
