@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0921</title>
+    <link rel="stylesheet" href="../style.css">
+
+</head>
+<body>
+
+    <!-- 🍀c50 include, 
+      ejs include는 comment에 있는 코드도 읽어버림. 
+      조심하자
+    -->
+    <%- include('./nav_c50.html') %>
+
+    <section>
+      <h1 class="title-page">./views/detail.ejs <br>c48 </h1>
+
+      <!-- 🦄c48, 🥒server.js -->
+      <!-- ig_data.~ -->
+      <h4>id: <%= ig_data._id %> </h4>
+      <h4>Title: <%= ig_data.title %> </h4>
+      <h4>Date:  <%= ig_data.date %></h4>
+
+      <br>    
+        
+      <a href="/update/<%= ig_data._id %>" class="myBtn">update</a>
+
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</body>
+</html>

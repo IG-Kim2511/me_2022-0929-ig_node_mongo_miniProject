@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <title>Document</title>
+        <link rel="stylesheet" href="style.css">
+
+  </head>
+  <body>
+           
+    <!-- 🍀c50 include, 
+      ejs include는 comment에 있는 코드도 읽어버림. 
+      조심하자
+    -->
+    <%- include('./nav_c50.html') %>
+
+    <h1 class="title-page">/views/write.ejs  </h1>
+   
+      <!--🦄🥒 c24-4-1)         
+          /add 경로로, POST요청함 👉server.js    
+          action="/add" method="POST"  
+
+          html에서는
+          GET, POST 요청만 가능함
+          PUT, DELETE  불가능
+      -->
+      <!-- action="/add" method="POST" -->
+      <form action="/add" method="POST">
+
+          <label>오늘의 할일</label>
+
+          <!--  🦄🥒c24-4-1) 
+            name="ig-title" 
+            -->
+          <input type="text"  name="ig_title" />
+
+          <br>
+          <label>날짜</label>
+
+            <!--  🦄🥒 c24-4-1) 
+                  name="ig-data" />       
+              -->
+            <input type="text"  name="ig_data" />
+
+            <br>
+          <button type="submit" class="myBtn">Submit</button>
+      </form>   
+
+  </body>
+</html>

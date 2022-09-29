@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0921</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>       
+
+    <!-- 🍀c50 include, 
+      ejs include는 comment에 있는 코드도 읽어버림. 
+      조심하자
+    -->
+    <%- include('./nav_c50.html') %>  
+   
+    <h1 class="title-page">./views/list.ejs</h1>
+
+      <br><br>
+
+      <!-- 👉🦄c66 -->
+      <!-- 👉하단의 js코드 -->
+      <div>
+        <!-- id="search-input", id="search" -->
+        <p>c66 간단 search</p>
+        <input type="text" id="search-input">
+        <button id="search" class="myBtn">search</button>
+      </div>
+      
+   
+      <br>
+      <section>
+          <h2>🍀c32. 서버에서 가져온 할일 리스트</h2>
+  
+          <!-- 🍀c34 -->
+          <h4>할일 제목 : <%= ig_posts[0].title %></h4>
+          <p>할일 마감날짜 : <%= ig_posts[0].date %></p>
+          
+          <br><br>
+          <h2>🍀c34 반복문</h2>
+          <!-- 🦄c34 반복문     <%  %>   
+              for (let i = 0; i < array.length; i++) {
+                 array[i];              
+              }        
+          -->
+          
+        <%    for (let i = 0; i < ig_posts.length; i++) {   %>  
+          <div class="list">
+              <h2>id: <%= ig_posts[i]._id %></h2>
+              <h2>할일 제목 : <%= ig_posts[i].title %></h2>
+              <p>할일 마감날짜 : <%= ig_posts[i].date %></p> 
+              
+              <!-- 🍀c42 -->
+              <button class="myBtn delete" data-id="<%= ig_posts[i]._id %>">Delete</button>
+              
+              <button class="myBtn delete_c72" data-id="<%= ig_posts[i]._id %>">delete_c72</button>
+
+              <!-- 🍀c48 href="http://localhost:3000/detail/<%= ig_posts[i]._id %>"-->
+              
+              <a class="myBtn detail"  data-id="<%= ig_posts[i]._id %>" href="/detail/<%= ig_posts[i]._id %>">Detail page</a>
+              
+          </div>
+          <%  }  %>  
+
+        
+
+      </section>
+
+<!-- 🦄🦄c42,44,46, AJAX로 DELETE 요청하기 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+
+  // 🦄c41
+  // 🍀44-40) 버튼클릭 & 실행  👉html
+    $('.delete').click((e)=>{           
+
+      // 🍀46-20) this : 지금 클릭한 것
+      let thisClicked= $(this);
+
+        // 🍀44. ajax요청시, /delete서버에 {_id:1}정보 보내줌
+        $.ajax({
+          method: "DELETE",
+          url: "/delete",
+          // data: { _id : 7}      //👉server.js , req.body
+
+          //🍀44-50. e.target.dataset.id : 클릭한 버튼에 숨겨진 data-id값 가져오기
+          data: {_id: e.target.dataset.id}
+          
+        }).done(function() {            //🥒c46-30)
+                    
+          /* 
+            46)
+            w1 : page 강제 새로고침   -->  location.reload()
+            w2 : 삭제버튼 클릭한 div를 제거 or 안보이게함          
+          */
+
+          // 46-20).parent('div').fadeOut();
+          thisClicked.parent('div').fadeOut();
+          location.reload();
+        
+          console.log('ig delete success - list.js')
+        }).fail(function (jqXHR, textStatus) {                  //👉c46-40)
+
+        console.log('c44, delete-fail')
+        console.log( "Request failed: " + textStatus );   
+        });
+    });
+
+
+    // 🦄c72
+    $('.delete').click((e)=>{
+        $.ajax({
+          method: "DELETE",
+          url: "/delete_c72",
+          data: {_id: e.target.dataset.id}
+          
+        }).done(function() {
+          
+          $(this).parent('div').fadeOut();
+          location.reload();
+
+          console.log('ig delete success - list.js')
+        }).fail(function (jqXHR, textStatus) {                  
+
+        console.log('c44, delete-fail')
+        console.log( "Request failed: " + textStatus );   
+        });
+     });
+    
+
+
+    //🦄🦄c66
+    //🍀c66-10). search기능 만들기, query string 만듬 (Query string parameters)
+      /* 🍄
+        -2) search btn click,       
+
+        -6) ejs -> server.js로  데이터 보냄 끝 
+
+          6-a) POST요청으로 기능만들기. 끝
+          
+          6-b) GET요청으로 만들어보기  👉 이제부터 할 코드 👉 "Query string parameters"사용함
+      */
+
+      /* 🍉Query string parameters
+      
+           `/~ㄴ~?~ㄱ~`
+
+           `/~ㄴ~?value=${~ㄱ~}`
+
+          버튼 클릭, ㄱ을 ㄴ서버로 get요청 , 
+      */
+
+
+    // 🍉
+      $('#search').click(function () {
+        
+           //🥒 window.location.replace('/search') : 버튼 클릭, /search로 이동함 = app.get(~)과 비슷함
+          // 👉server.js.... app.get('/search',~ ) 로 연결됨
+          // window.location.replace('/search')
+
+
+          // 🥒 $('#search-input').val() : input value 
+          // 🥒 Query string parameters: `/~~?value=${~~~~}`
+          
+          var ig_search_input값 = $('#search-input').val()
+
+          window.location.replace(`/search_c68?value=${ig_search_input값}`)        
+      })
+  </script>
+</body>
+</html>

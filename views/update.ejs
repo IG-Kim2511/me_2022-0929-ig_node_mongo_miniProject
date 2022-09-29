@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+            
+    <%- include('./nav_c50.html') %>
+    <h1 class="title-page">/views/update.ejs  </h1>   
+
+    <!-- action="/add" method="POST" -->
+    <form action="/add" method="POST">
+
+
+      <div class="form-group">
+        <label>오늘의 할일</label>
+
+        <input type="text" name="ig_title" />
+
+        
+      </div>
+      <div class="form-group">
+        <label>날짜</label>
+
+  
+        <input type="text"  name="ig_data" />
+      </div>
+      <button type="submit" class="myBtn btn-outline-secondary">Submit</button>
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    
+        
+    <%- include('./nav_c50.html') %>
+    <h1 class="title-page">/views/update-id.ejs  </h1>
+
+    <h4>id: <%= ig_post._id %> </h4>
+    <h4>Title: <%= ig_post.title %> </h4>
+    <h4>Date:  <%= ig_post.date %></h4>
+    
+    <!-- 🦄🥒c52    
+        -20-1)
+        /edit 경로로, POST요청함                    👉server.js     
+        action="/edit?_method=PUT" method="POST"
+
+        -20-2)
+        html에서는
+        GET, POST 요청만 가능함
+        PUT, DELETE  불가능
+
+        npm install method-override
+        /edit경로로 PUT요청 가능해짐      
+        
+        -20-4)
+        🍄value에 db의 데이터 넣음.                                         
+        DB에서 edit할 해당게시물의 데이터를 여기에 넣어야 함
+        수정된 데이터를 submit하는 기능만들기
+    -->
+
+    <!-- 🦄c54 -->
+    <!--  🍀method="POST" action="/resource?_method=PUT" -->
+    <!--  🍀method="POST" action="/resource?_method=DELETE" -->
+    <form  method="POST" action="/update-id?_method=PUT">
+    
+      <div class="form-group">
+        <label>_id정보..몰래 보냄, style="display: none;" 추가 </label>
+
+        <!-- 🥒c54 style="display:none; 안보이는 input만들어서, 몰래 id정보를 server.js로 보내기-->
+        <!-- name="ig_id" value="" style="display:none; -->
+        <input type="text" name="ig_id" value="<%= ig_post._id %>" />
+
+        <br>
+        <label>오늘의 할일: </label>   
+        <!-- value  -->
+        <input type="text" name="ig_title" value="<%= ig_post.title %>"/>
+
+        <br>
+        <label>날짜: </label>
+
+        <!-- 🥒c52 value="" -->
+        <input type="text" name="ig_date" value="<%= ig_post.date %>"/>
+      </div>
+
+      <!--c54) 
+      type="submit" button클릭하면, name을 가진 input정보를 서버로 전송해줌        
+      type="reset" button을 클릭하면 입력된 input들이 모두 초기화된다.       -->
+      <button type="submit" class="myBtn">Submit</button>
+  </form>
+    
+</body>
+</html>

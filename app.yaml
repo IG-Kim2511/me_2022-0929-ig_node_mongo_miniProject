@@ -1,0 +1,18 @@
+# 🦄c76
+#  코드는 구글에서 샘플로 보여주는 app.yaml 파일 예시입니다.
+# https://cloud.google.com/appengine/docs/legacy/standard/python/config/appref
+# 그대로 따라 적으면 되겠습니다. 서버의 CPU, 메모리 용량도 셋팅 가능합니다.
+# 위 예시는 돈많이 안쓰려고 극 저용량으로 셋팅한 예시입니다.
+# (사이트 개느려지는데 금액적으로 안심!)
+# 돈 적당히 쓰고 빠른 사이트를 원하시면 맨 위 두줄만 적어보세요. 
+
+
+runtime: nodejs
+env: flex
+
+manual_scaling:
+  instances: 1
+resources:
+  cpu: 1
+  memory_gb: 0.5
+  disk_size_gb: 10

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0921</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>       
+
+    <%- include('./nav_c50.html') %>  
+   
+    <h1 class="title-page">./views/list.ejs</h1>
+
+      <br><br>
+
+
+        <p>c66 간단 search</p>
+        <input type="text" id="search-input">
+        <button id="search" class="myBtn">search</button>
+      </div>
+      
+   
+      <br>
+      <section>
+          <h2>🍀c32. 서버에서 가져온 할일 리스트</h2>
+  
+          <!-- 🍀c34 -->
+          <h4>할일 제목 : <%= ig_posts[0].title %></h4>
+          <p>할일 마감날짜 : <%= ig_posts[0].date %></p>
+          
+          <br><br>
+          <h2>🍀c34 반복문, 🍀reverse.forEach </h2>
+
+          <!-- 🦄c34. 🍀reverse.forEach적용하기 -->
+          
+          <% ig_posts.slice().reverse().forEach(function(item) {     %>  
+            <div class="list">
+              <h2>id: <%= item._id %></h2>
+              <h2>할일 제목 : <%= item.title %></h2>
+              <p>할일 마감날짜 : <%= item.date %></p> 
+              
+              <!-- 🍀c42 -->
+              <button class="myBtn delete" data-id="<%= item._id %>">Delete</button>
+              
+              <button class="myBtn delete_c72" data-id="<%= item._id %>">delete_c72</button>
+      
+              <!-- 🍀c48 href="http://localhost:3000/detail/<%= item._id %>"-->
+              
+              <a class="myBtn detail"  data-id="<%= item._id %>" href="/detail/<%= item._id %>">Detail page</a>              
+            </div>
+          <%  })  %>  
+          
+    
+
+        
+
+      </section>
+
+<!-- 🦄🦄c42,44,46, AJAX로 DELETE 요청하기 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+
+  // 🦄c41
+    $('.delete').click((e)=>{           
+
+        // 🍀44
+        $.ajax({
+          method: "DELETE",
+          url: "/delete",
+          data: {_id: e.target.dataset.id}
+          
+        }).done(function() {
+          
+          $(this).parent('div').fadeOut();
+          location.reload();
+        
+          console.log('ig delete success - list.js')
+        }).fail(function (jqXHR, textStatus) {                  //👉c46-40)
+
+        console.log('c44, delete-fail')
+        console.log( "Request failed: " + textStatus );   
+        });
+    });
+
+
+    // 🦄c72
+    $('.delete').click((e)=>{
+        $.ajax({
+          method: "DELETE",
+          url: "/delete_c72",
+          data: {_id: e.target.dataset.id}
+          
+        }).done(function() {
+          
+          $(this).parent('div').fadeOut();
+          location.reload();
+
+          console.log('ig delete success - list.js')
+        }).fail(function (jqXHR, textStatus) {                  
+
+        console.log('c44, delete-fail')
+        console.log( "Request failed: " + textStatus );   
+        });
+     });
+    
+
+
+    //🦄🦄c66
+    //🍀c66-10). search기능 만들기, query string 만듬 (Query string parameters)
+
+    // 🍉
+      $('#search').click(function () {          
+          var ig_search_input값 = $('#search-input').val()
+
+          window.location.replace(`/search_c68?value=${ig_search_input값}`)        
+      })
+  </script>
+</body>
+</html>
