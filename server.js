@@ -303,7 +303,7 @@ MongoClient.connect(url, function(mongo_err, client) {
   // 🍉req.user : db의 데이터
   app.get("/mypage",loginCheck, function (req, res) {
     console.log((`/mypage : req.user`).bgYellow)
-    console.log(req.user)
+    console.log(req.user)  
     res.render('mypage_62.ejs',{ig_mypage유저정보: req.user})
   });
 
