@@ -111,21 +111,6 @@ MongoClient.connect(url, function(mongo_err, client) {
   
 
   //🦄🦄c34 find(.).toArray(,)={}), { posts   }
-  // 👉list.ejs
-      
-  // 🍀c34. list
-  app.get("/list", function (req, res) {
-
-    // find().toArray()
-    db.collection('post').find().toArray(function (err,p_db) {
-      console.log(p_db)
-      
-      // ejs
-      //res.render
-      res.render('list.ejs',{ig_posts:p_db,ig_title:req.params.id});
-    })
-
-  });
 
   // 🍀c34-2. list-reverse
   app.get("/list-reverse_c34", function (req, res) {
@@ -342,7 +327,7 @@ MongoClient.connect(url, function(mongo_err, client) {
   //🦄🦄c66  Query string parameters, ('/search?value='+입력한value), req.query.value, window.location.replace('/~')
   // 👉views/list.ejs : html, javascript 
 
-  
+
   //🦄🦄c70 검색기능3 mongoDB사이트...search index탭, $.parma(~), $("#form").serialize(~), aggregate(~), $search, $sort,$limit, $project, {$meta:"searchScore"}
   // 👉mongoDB사이트  collection 👉 index
   // 👉 mongoDB사이트...search index탭 활용함
