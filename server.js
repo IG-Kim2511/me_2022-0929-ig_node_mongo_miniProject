@@ -258,7 +258,7 @@ MongoClient.connect(url, function(mongo_err, client) {
       
       // ejs
       //res.render
-      res.render('list.ejs',{ig_posts:p_db결과});
+      res.render('list.ejs',{ig_posts:p_db결과,ig_title:req.params.id});
     })
 
   });
@@ -339,7 +339,7 @@ MongoClient.connect(url, function(mongo_err, client) {
       console.log(p_res)
 
       // .render('~c~',{ ~b~ : ~a~ })
-      res.render('detail.ejs',{ig_data: p_res})      
+      res.render('detail.ejs',{ig_data: p_res, ig_title:req.params.id})      
     });    
   });
 
