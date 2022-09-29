@@ -341,30 +341,8 @@ MongoClient.connect(url, function(mongo_err, client) {
 
   //🦄🦄c66  Query string parameters, ('/search?value='+입력한value), req.query.value, window.location.replace('/~')
   // 👉views/list.ejs : html, javascript 
-  
-  app.get('/search_c68',(req,res)=>{
-    
-    // 🥒req.query 
-    console.log(req.query)
-    console.log(req.query.value)
-
-     // 🥒 collection().find().toArray()  
-    // find({제목:req.query.value})  
-    db.collection('post').find({title:req.query.value}).toArray((p_err,p_db)=>{
-      
-      console.log(colors.bgBrightMagenta('get./search_c68'))
-      console.log(p_db)
 
   
-      //🦄🦄c68 검색기능2 mongoDB사이트...index탭, Binary Search, 
-      // 👉views/👉search_c68.ejs
-
-      res.render('search_c68.ejs',{ig_posts:p_db});
-
-    })
-  });
-   
-
   //🦄🦄c70 검색기능3 mongoDB사이트...search index탭, $.parma(~), $("#form").serialize(~), aggregate(~), $search, $sort,$limit, $project, {$meta:"searchScore"}
   // 👉mongoDB사이트  collection 👉 index
   // 👉 mongoDB사이트...search index탭 활용함
