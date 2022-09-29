@@ -130,7 +130,7 @@ MongoClient.connect(url, function(mongo_err, client) {
   if (mongo_err) throw mongo_err;
   console.log((`ig-Database created!`).bgBrightMagenta)
 
-  let db = client.db('db0921')
+  let db = client.db('db0929')
 
   // 🦄🦄c32 npm ejs 1, ejs 파일 만들기
   // 👉write.ejs
@@ -185,7 +185,7 @@ MongoClient.connect(url, function(mongo_err, client) {
       
       // 🍀insertOne, _id: pp_res.totalPost+1
       // .insertOne(~) : .insertOne(저장할 데이터, 그 이후 실행할 콜백함수)  👉 mongoDB에 가면 저장된 데이터 확인됨
-      db.collection('co0921').insertOne({_id:pp_res.totalPost+1,title: req.body.ig_title, date:req.body.ig_data },function (){
+      db.collection('post').insertOne({_id:pp_res.totalPost+1,title: req.body.ig_title, date:req.body.ig_data },function (){
         console.log('insertone success'.blue)      
 
 
@@ -253,7 +253,7 @@ MongoClient.connect(url, function(mongo_err, client) {
   app.get("/list", function (req, res) {
 
     // find().toArray()
-    db.collection('co0921').find().toArray(function (err,p_db결과) {
+    db.collection('post').find().toArray(function (err,p_db결과) {
       console.log(p_db결과)
       
       // ejs
@@ -267,7 +267,7 @@ MongoClient.connect(url, function(mongo_err, client) {
   app.get("/list-reverse_c34", function (req, res) {
 
     // find().toArray()
-    db.collection('co0921').find().toArray(function (err,pp_res) {
+    db.collection('post').find().toArray(function (err,pp_res) {
       console.log(pp_res)
       
       // ejs
@@ -299,7 +299,7 @@ MongoClient.connect(url, function(mongo_err, client) {
     req.body._id = parseInt(req.body._id);
 
     // ~.deleteOne()
-    db.collection('co0921').deleteOne(req.body, function (pp_err, pp_res) {
+    db.collection('post').deleteOne(req.body, function (pp_err, pp_res) {
          console.log('ig delete fin')
 
       // c46-30) 성공코드 200:  res응답.status(200).send({message : "c46, success"});  
@@ -335,7 +335,7 @@ MongoClient.connect(url, function(mongo_err, client) {
     //  req요청.params.id 
     // findOne({~},function(){})
     // parseInt 
-    db.collection('co0921').findOne({_id: parseInt(req.params.id)},function (pp_err,p_res) {
+    db.collection('post').findOne({_id: parseInt(req.params.id)},function (pp_err,p_res) {
       console.log(p_res)
 
       // .render('~c~',{ ~b~ : ~a~ })
@@ -397,7 +397,7 @@ MongoClient.connect(url, function(mongo_err, client) {
 
   // 🍀 /update/:id
   app.get("/update/:id", function (req, res) {
-    db.collection('co0921').findOne({_id: parseInt(req.params.id)},function (pp_err, p_db결과) {    
+    db.collection('post').findOne({_id: parseInt(req.params.id)},function (pp_err, p_db결과) {    
         
       console.log(p_db결과)
       res.render('update-id.ejs',{ig_post: p_db결과})      
@@ -411,7 +411,7 @@ MongoClient.connect(url, function(mongo_err, client) {
 
     console.log(res.body)
 
-    db.collection('co0921').updateOne({_id:parseInt(req.body.ig_id)},{$set:{title: req.body.ig_title, date: req.body.ig_date}},function (p_err, p_res) {
+    db.collection('post').updateOne({_id:parseInt(req.body.ig_id)},{$set:{title: req.body.ig_title, date: req.body.ig_date}},function (p_err, p_res) {
       console.log('ig- update- fin')
 
       // 🍀redirect
@@ -599,7 +599,7 @@ MongoClient.connect(url, function(mongo_err, client) {
 
      // 🥒 collection().find().toArray()  
     // find({제목:req요청.query.value})  👉 문제점: 정확히 일치하는 것만 찾아줌
-    db.collection('co0921').find({title:req.query.value}).toArray((p_err,p_db결과)=>{
+    db.collection('post').find({title:req.query.value}).toArray((p_err,p_db결과)=>{
       
       console.log(colors.bgBrightMagenta('get./search_c68'))
       console.log(p_db결과)
@@ -639,7 +639,7 @@ MongoClient.connect(url, function(mongo_err, client) {
       // 👉mongoDB사이트  collection 👉 index
       // {title:req요청.query.value} : full scan하는 이전 방법      
       /*      
-        db.collection('co0921').find({title:req요청.query.value}).toArray((P_err,p_db)=>{
+        db.collection('post').find({title:req요청.query.value}).toArray((P_err,p_db)=>{
           console.log(p_db)
           res응답.render('search_c70.ejs',{ig_posts:p_db});
         }); 
@@ -648,7 +648,7 @@ MongoClient.connect(url, function(mongo_err, client) {
 
       // 🍀실패함 {$text:{ $search: req요청.query.value}}
       /*  
-        db.collection('co0921').find({$text:{ $search: req요청.query.value}}).toArray((P_err,p_db)=>{
+        db.collection('post').find({$text:{ $search: req요청.query.value}}).toArray((P_err,p_db)=>{
           console.log(p_db)
           res응답.render('search_c70.ejs',{ig_posts:p_db});
         }); 
@@ -694,7 +694,7 @@ MongoClient.connect(url, function(mongo_err, client) {
         {$limit : 10},
         {$project : {title : 1, date:1, _id: 0, score :{$meta : "searchScore"}}}
       ];
-      db.collection('co0921').aggregate(검색조건).toArray((err,p_db결과)=>{
+      db.collection('post').aggregate(검색조건).toArray((err,p_db결과)=>{
         console.log(p_db결과)  
   
         res응답.render('search_c70.ejs',{ig_posts:p_db결과});
@@ -756,7 +756,7 @@ MongoClient.connect(url, function(mongo_err, client) {
       */
       let 저장할것 = {작성자: req요청.user._id , title: req요청.body.ig_title, date:req요청.body.ig_data}
 
-      db.collection('co0921').insertOne(저장할것,function (p_err, p_db결과) {
+      db.collection('post').insertOne(저장할것,function (p_err, p_db결과) {
 
         console.log('co0921-saved')        
       })      
@@ -780,8 +780,8 @@ MongoClient.connect(url, function(mongo_err, client) {
         // 🍉{_id:req.body._id, 작성자:req.user._id} 둘다 만족하는 게시물을 찾아서 delete해줌
         let 삭제할데이터 = {_id:req.body._id, 작성자:req.user._id}
 
-        //🍉기존 c41에서의 코드와의 차이점 :  db.collection('co0921').deleteOne(req.body, function (pp_err, pp_res) {
-        db.collection('co0921').deleteOne(삭제할데이터, function (pp_err, pp_res) {
+        //🍉기존 c41에서의 코드와의 차이점 :  db.collection('post').deleteOne(req.body, function (pp_err, pp_res) {
+        db.collection('post').deleteOne(삭제할데이터, function (pp_err, pp_res) {
             console.log('ig delete fin')
 
           res.status(200).send({message:"ig delete fail"});
