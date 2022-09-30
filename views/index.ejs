@@ -11,6 +11,7 @@
 </head>
 <body>       
 
+  
     <!-- 🍀c50 include, 
       ejs include는 comment에 있는 코드도 읽어버림. 
       조심하자
@@ -18,7 +19,19 @@
     <%- include('./nav_c50.html') %>
 
     <h1 class="title-page">/views/index.ejs : home </h1>
-    <p>home</p>
+   
     
+    <section class="home">
+      <ul class="home-tools">            
+        <li class="tool"><a href="/">home</a></li>
+        <li class="tool"><a href="/write">write</a></li>    
+        <li class="tool"><a href="/list-reverse_c34">list</a></li>    
+
+        <li class="tool"><a href="/login">login</a></li>
+        <li class="tool"><a href="/register_c72">register</a></li>      
+        <li class="tool"><a href="/mypage">mypage</a></li>
+      </ul>    
+    </section>
+ 
 </body>
 </html>

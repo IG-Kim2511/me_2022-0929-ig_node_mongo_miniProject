@@ -1,6 +1,5 @@
 
 // c18 express
-// require(~) : ~파일, ~라이브러리을 가져와서(import) 쓰겠다는 뜻
 const express = require("express");
 const app = express();
 
@@ -18,10 +17,10 @@ require('dotenv').config()
 let MongoClient = require('mongodb').MongoClient;
 
  // c32) ejs
-// let ejs = require('ejs'); 👉documnet에 있는 사용법인데 아직 이해못했음
+// let ejs = require('ejs'); 
 app.set('view engine','ejs')
 
-// c50) static 파일 보관위해 public폴더 씀. html에서 경로설정할 때 root폴더에 보관된 것처럼 경로 설정함
+// c50)
 app.use(express.static('public'))
 
 // c52)  method-override
@@ -43,15 +42,6 @@ app.use(session({ secret: 'ig123', resave: true, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-/* 
-  🍀me - next 수업에 나올 상단 코드 정리
-
-  // c64) .env 파일, environment variable, 
-  // root folder에 .env파일 만들때 : require('dotenv').config()
-  // 다른 folder(env_c64)에 .env파일 만들때 : require('dotenv').config({path: "./env_c64/.env"})
-  require('dotenv').config({path: "./env_c64/.env"})
-*/
 
 
 // 🍀route : get, post, put, delete
@@ -95,7 +85,7 @@ MongoClient.connect(url, function(mongo_err, client) {
       console.log(pp_res.totalPost)
       
       // 🍀insertOne, _id: pp_res.totalPost+1
-      db.collection('post').insertOne({_id:pp_res.totalPost+1,title: req.body.ig_title, date:req.body.ig_data },function (){
+      db.collection('post').insertOne({_id:pp_res.totalPost+1,title: req.body.ig_title, date:req.body.ig_data, desc: req.body.ig_desc },function (){
         console.log('insertone success'.bgBlue)         
     
         // 🦄🦄c40 id+1, updateOne(.), mongodb operator $inc $set 
@@ -173,7 +163,7 @@ MongoClient.connect(url, function(mongo_err, client) {
       console.log(p_res)
 
       // .render('~c~',{ ~b~ : ~a~ })
-      res.render('detail.ejs',{ig_data: p_res, ig_title:req.params.id})      
+      res.render('detail.ejs',{ig_data: p_res})      
     });    
   });
 
@@ -350,7 +340,7 @@ MongoClient.connect(url, function(mongo_err, client) {
       let pipeline =[
         {
           $search:{
-            index : "ig_titleSearch",
+            index : "ig_titleSearch2",
             text:{
               query: req.query.value,
               path: ["title",'date']        //db안의 오브젝트 이름
@@ -446,10 +436,6 @@ MongoClient.connect(url, function(mongo_err, client) {
           res.status(200).send({message:"ig delete fail"});
         })        
       });
-
-
-
-
 
 
     // 👉🍀c18, listen

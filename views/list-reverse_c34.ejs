@@ -24,30 +24,22 @@
       </div>
     
       <br>
-      <section>
-          <h2>🍀c32. 서버에서 가져온 할일 리스트</h2>
-  
-          <!-- 🍀c34 -->
-          <h4>할일 제목 : <%= ig_posts[0].title %></h4>
-          <p>할일 마감날짜 : <%= ig_posts[0].date %></p>
-          
-          <br><br>
-          <h2>🍀c34 반복문, 🍀reverse.forEach </h2>
-
+      <section>       
           <!-- 🦄c34. 🍀reverse.forEach적용하기 -->
           
           <% ig_posts.slice().reverse().forEach(function(item) {     %>  
             <div class="list">
               <h2>id: <%= item._id %></h2>
-              <h2>할일 제목 : <%= item.title %></h2>
-              <p>할일 마감날짜 : <%= item.date %></p> 
+              <h2>Title : <%= item.title %></h2>
+              <p>Date : <%= item.date %></p> 
+              <p>Description : <%= item.desc %></p> 
               
               <!-- 🍀c42 -->
               <!-- 👉js 42 -->
               <button class="myBtn delete" data-id="<%= item._id %>">Delete</button>
               
               <!-- 👉js 72 -->
-              <button class="myBtn delete_c72" data-id="<%= item._id %>">delete_c72</button>
+              <!-- <button class="myBtn delete_c72" data-id="<%= item._id %>">delete_c72</button> -->
       
               <!-- 🍀c48 href="http://localhost:3000/detail/<%= item._id %>"-->
               

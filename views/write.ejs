@@ -17,6 +17,7 @@
 
     <h1 class="title-page">/views/write.ejs  </h1>
    
+    <section class="write">
       <!--🦄🥒 c24-4-1)         
           /add 경로로, POST요청함 👉server.js    
           action="/add" method="POST"  
@@ -28,7 +29,7 @@
       <!-- action="/add" method="POST" -->
       <form action="/add" method="POST">
 
-          <label>오늘의 할일</label>
+          <label>title</label>
 
           <!--  🦄🥒c24-4-1) 
             name="ig-title" 
@@ -36,16 +37,26 @@
           <input type="text"  name="ig_title" />
 
           <br>
-          <label>날짜</label>
+          <label>date</label>
 
             <!--  🦄🥒 c24-4-1) 
                   name="ig-data" />       
               -->
             <input type="text"  name="ig_data" />
 
+          <br>
+          <label>description</label>
+
+          <!--  🦄🥒 c24-4-1) 
+                name="ig_desc" />       
+            -->
+            <textarea name="ig_desc"  id="" cols="30" rows="10"></textarea>
+          
+
             <br>
           <button type="submit" class="myBtn">Submit</button>
       </form>   
+    </section>
 
   </body>
 </html>
