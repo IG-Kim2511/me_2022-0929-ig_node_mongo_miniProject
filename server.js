@@ -374,17 +374,7 @@ MongoClient.connect(url, function(mongo_err, client) {
     // 👉./views/register_c72.ejs
     // 👉./views/list.ejs
     
-    console.log('🦄🦄c72 ')
-    /*
-      🍀(나중에 알아서 추가)
-        🍉id중복검사하고 저장하기 
-        🍉id에 알파벳, 숫자 잘 들어있나 검사하고 저장하기 
-        🍉비번 저장전에 암호화했나     
 
-        🍀
-        아이디 park으로, 아이디kim으로 아까 저장한 게시물 삭제해보기
-        👉ui로는 삭제되는데, 새로고침해보면 삭제안되고 그대로인걸 확인할 수 있음
-    */
 
     app.get('/register_c72', (req,res)=>{
       res.render('register_c72.ejs')
@@ -434,14 +424,15 @@ MongoClient.connect(url, function(mongo_err, client) {
     // 🍀delete, 실제 로그인 한 _id == 글에 저장된 _id 같을때만 삭제하기 : passport~~~ 코드 밑에 코딩해야함
     // 👉./views/list.ejs
 
-    /* 
-      🍉아이디 park으로, 아이디kim으로 아까 저장한 게시물 삭제해보기
-      👉일단 화면에서 삭제되는데, 새로고침해보면 삭제안되고 그대로인걸 확인할 수 있음
-    */
-
       app.delete('/delete_c72', function (req,res) {
         
+        console.log((`delete_c72`).bgBlue)
         console.log(req.body)
+        console.log((`req.body._id`).bgBlue)
+        console.log(req.body._id)
+        console.log((`req.body.title`).bgBlue)
+        console.log(req.body.title)
+        console.log(req.user._id)
 
         req.body._id = parseInt(req.body._id);
 
@@ -456,195 +447,6 @@ MongoClient.connect(url, function(mongo_err, client) {
         })        
       });
 
-
-
-    //🦄🦄c74 router(=app.get(~)묶음)관리, router.get(주소, 미들웨어, 함수), router.use(미들웨어)
-    // 👉 ./routes/shop_c74.js
-    // 👉 ./routes/zoo_c74.js
-    
-    /*🍀 app.get(~) 묶음 관리하기
-       routes : 너무 많은 app.get(~)을 1개의 파일로 묶어서 관리하기
-      
-       🍀 https://expressjs.com/en/guide/routing.html
-    */
-
-    
-    //🍉 /shop2 
-    // 👉 ./routes/shop2_c74.js
-    app.use('/shop2', require('./routes/shop2_c74.js'))
-
-
-
-    // 🍉미들웨어 함수 적용하는법 : ig_middleware
-    // ./rountes/zoo_c74.js 파일을 여기에 첨부
-    
-    app.use('/zoo', require('./routes/zoo_c74.js'))
-
-        
-    // 🦄🦄c76 Google Cloud(=AWS) 사이트배포, app.yaml, gcloud init, gcloud app deploy
-    // 👉노트필기 필수 참고
-    // 👉app.yaml
-    // 👉Google Cloud - App Engine - dash board
-
-    /* 
-      🍀2. server.js에 서버를 띄울 때 포트가 8080인지 확인합니다.
-        Google cloud default port : 8080      
-
-      🍀명령어
-        gcloud init
-        gcloud app deploy
-    */
-
-
-  
-        
-    // 🦄🦄c78 이미지 업로드 & api만들기, enctype="", multer, upload.array(~,~)
-    // 👉views/upload_c78.ejs
-    // 👉./public/image_c78
-
-    // 🍚 ?? 왜 local publilc/image/~ 폴더에 저장하는지 이해 못했음. DB에 저장해야 API로 사용할수있는것 아닌가?
-
-
-    /* 
-      🍀-10) upload.ejs 만듬 : 👉views/upload_c78.ejs
-    */
-
-    app.get('/upload',(req,res)=>{
-      res.render('upload_c78.ejs');
-    });
-
-    /* 
-      🍀-20) npm install multer
-
-          diskStorage : 컴퓨터 하드안에 저장
-          memoryStorage : 램안에 저장. 휘발성..저장
-    */
-    const multer = require('multer')
-
-    // 🍉diskStorage
-    const storage = multer.diskStorage({
-
-      // 🍉경로 : './public/image_c78'
-      destination: function (req, file, cb) {
-        cb(null, './public/image_c78')
-      },
-
-      // 🍉file name 설정 : file.originalname
-      filename: function (req, file, cb) {
-        console.log((`multer-filename-file`).bgBrightMagenta)
-        console.log(file)
-
-        /* 🍉파일명 추가로 넣기      
-          a) 
-          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-          cb(null, file.originalname + '-' + uniqueSuffix)    
-
-          b) 
-          cb(null, file.originalname + '날짜:' + new Date())    
-        */
-        cb(null, file.originalname)
-        
-      }
-    })
-
-    // 🍉const upload : 모든설정...const upload에 저장함. const multer , const storage 가져옴
-
-    const upload = multer({
-      storage: storage,
-
-      /* 
-        // 🍉fileFilter : PNG, JPG만 업로드하기
-        fileFilter: function (req, file, callback) {
-            var ext = path.extname(file.originalname);
-            if(ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg') {
-                return callback(new Error('PNG, JPG만 업로드하세요'))
-            }
-            callback(null, true)
-        },
-
-        // 🍉limits : 파일사이즈 제한
-        limits:{
-            fileSize: 1024 * 1024
-        }
-      */
-    });
-
-
-    /* 
-      🍀-30
-          upload.ejs에서 post요청오면
-
-          ./public/image폴더안에 저장함
-    */
-
-    /* 
-      🍉미들웨어 const upload : upload.single('ig_uploadInput')
-      👉./views/upload.ejs의  <input type="file" name="ig_uploadInput"> 의 name="ig_uploadInput"가져옴
-    */
-    app.post('/upload',upload.single('ig_uploadInput'),(req,res)=>{
-      res.send('c78_fin');
-    });
-
-    /* 
-      🍀-40 API만들기 (업로드한 이미지... API로 만들기)
-
-      🍉URL파라미터 
-      
-        a) 이름짓기👉 :ig_imageName
-
-          적용 👉 req.params.ig_imageName
-
-
-        b) 파일경로 : __dirname +'/public/image_c78'
-
-
-        c) html에 img태그에 적용하기 (파일명 :   test_c78.jpg)
-        👉upload_c78.ejs
-        <img src="/public_c50/image_c78/test_c78.jpg" alt="">
-    */
-
-    app.get('/image_c78/:ig_imageName',(req,res)=>{
-      res.sendFile(__dirname +'/public/image_c78'+ req.params.ig_imageName)
-    })
-
-
-
-    // 🦄🦄80 라이브러리 소개 helmet.js , Mongoose, Connect-mongo, OAuth소셜로그인
-    /* 
-      보안 : helmet.js 라이브러리 
-      ex) express사용하고있다는 정보...숨겨줄 필요가 있음
-
-      Mongoose : mongodb 데이터저장할때 검사도와줌
-
-      OAuth소셜로그인 
-      Connect-mongo : 세션데이터..db저장  ...사용하면 속도 안느려지고 좋음
-    */
-
-
-    //🦄🦄82, 84, 86 웹소켓으로 채팅서비스 만들기 1 (Socket.io)
-    
-
-    // 🦄🦄88 Node서버+ React 합치기, app.get("*",~), 리액트 router사용, proxy 라이브 코딩
-
-    /*   
-        리액트 라우터에서 다 해결해주므로, 서버의 역할을  db연결만으로 축소시킬수있음
-
-        일반 자바스크립트 페이지 보다가,
-        특정페이지 들어갔을때, 리액트 페이지 보여주는 법
-
-        "/" 접속 : 자바스크립트 html페이지 보여줌
-        "/react"접속 :  리액트 페이지 보여줌
-
-        미들웨어 : 서버의 요청과 응답사이에 실행할 코드 , 
-        유저가 /~~url로 요청시, 응답하기전에 실행할 코드
-
-        "homepage" :"~~" 추가한 후 
-        npm run build
-
-        계속 중간에 멈추고 build를 해야하는가??
-        ㄴㄴ, 라이브로 가능함
-        proxy 검색
-    */
 
 
 

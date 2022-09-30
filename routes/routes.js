@@ -17,7 +17,7 @@ router.get("/style.css", function (req, res) {
 // 👉write.html
 
 router.get("/write", function (req, res) {
-    res.render('write.ejs',{meta_title:'miniProject'})
+    res.render('write.ejs')
 });
 
   
