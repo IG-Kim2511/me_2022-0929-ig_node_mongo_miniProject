@@ -107,11 +107,12 @@ MongoClient.connect(url, function(mongo_err, client) {
 
     // find().toArray()
     db.collection('post').find().toArray(function (err,pp_res) {
+      console.log((`list`).bgBlue)
       console.log(pp_res)
       
       // ejs
       //res.render
-      res.render('list.ejs',{ig_posts:pp_res,meta_title:'miniProject'});
+      res.render('list.ejs',{ig_posts:pp_res,  meta_title:'miniProject'});
     })
 
   });
