@@ -188,9 +188,7 @@ MongoClient.connect(url, function(mongo_err, client) {
   // 🦄🦄c52 =PUT=update,  PUT, method-override 
   // 👉update.ejs, update-id.ejs
 
-  app.get("/update", function (req, res) {
-    res.render('update.ejs')
-  });
+
 
   // 🍀 /update/:id
   app.get("/update/:id", function (req, res) {
