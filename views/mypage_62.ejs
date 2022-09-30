@@ -13,8 +13,33 @@
 
     <h1 class="title-page">/views/mypage_62.ejs  </h1>
 
-    <p>ig_mypage유저정보.id: <%= ig_mypage유저정보.id %>   </p>
+    <p>your ID: <%= ig_mypage유저정보.id %>   </p>
+
+    <button class="myBtn delete">log out</button>
    
+
+    <script>
+    $('.delete').click((e)=>{  
+        // 🍀44
+        $.ajax({
+        method: "DELETE",
+        url: "/logout",
+        data: {_id: e.target.dataset.id}
+        
+        }).done(function() {
+        
+        $(this).parent('div').fadeOut();
+        location.reload();
+
+        console.log('ig delete success - list.js')
+        }).fail(function (jqXHR, textStatus) {                  //👉c46-40)
+
+        console.log('c44, delete-fail')
+        console.log( "Request failed: " + textStatus );   
+        });
+    });
+
+    </script>
     
 </body>
 </html>
