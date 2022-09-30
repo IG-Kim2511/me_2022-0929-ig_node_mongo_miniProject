@@ -104,7 +104,15 @@ textarea {
   vertical-align: top;
 }
 
+input{
+  margin: 0.5rem;
+}
+
+
 .myBtn {
+
+  margin: 0.3rem;
+
   box-shadow: 0px 1px 0px 0px #f0f7fa;
   background: linear-gradient(to bottom, lightseagreen 5%, green 100%);
   background-color: lightseagreen;
