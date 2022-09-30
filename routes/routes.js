@@ -3,7 +3,7 @@ const router = express.Router()
 
 
 router.get("/", function (req, res) {
-    res.render('index.ejs')  
+    res.render('index.ejs',{meta_title:'miniProject'})  
 });
 
 
@@ -17,10 +17,8 @@ router.get("/style.css", function (req, res) {
 // 👉write.html
 
 router.get("/write", function (req, res) {
-    res.render('write.ejs')
+    res.render('write.ejs',{meta_title:'miniProject'})
 });
-
-
 
   
 module.exports = router

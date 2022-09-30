@@ -121,7 +121,7 @@ MongoClient.connect(url, function(mongo_err, client) {
       
       // ejs
       //res.render
-      res.render('list-reverse_c34.ejs',{ig_posts:pp_res});
+      res.render('list-reverse_c34.ejs',{ig_posts:pp_res,meta_title:'miniProject'});
     })
 
   });
@@ -212,7 +212,7 @@ MongoClient.connect(url, function(mongo_err, client) {
       console.log('ig- update- fin')
 
       // 🍀redirect     
-      res.redirect('/list');
+      res.redirect('/list-reverse_c34');
     })
   });
 
