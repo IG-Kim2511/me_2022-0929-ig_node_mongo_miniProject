@@ -103,7 +103,7 @@ MongoClient.connect(url, function(mongo_err, client) {
   //🦄🦄c34 find(.).toArray(,)={}), { posts   }
 
   // 🍀c34-2. list-reverse
-  app.get("/list-reverse_c34", function (req, res) {
+  app.get("/list", function (req, res) {
 
     // find().toArray()
     db.collection('post').find().toArray(function (err,pp_res) {
@@ -111,7 +111,7 @@ MongoClient.connect(url, function(mongo_err, client) {
       
       // ejs
       //res.render
-      res.render('list-reverse_c34.ejs',{ig_posts:pp_res,meta_title:'miniProject'});
+      res.render('list.ejs',{ig_posts:pp_res,meta_title:'miniProject'});
     })
 
   });
@@ -200,7 +200,7 @@ MongoClient.connect(url, function(mongo_err, client) {
       console.log('ig- update- fin')
 
       // 🍀redirect     
-      res.redirect('/list-reverse_c34');
+      res.redirect('/list');
     })
   });
 
@@ -210,13 +210,13 @@ MongoClient.connect(url, function(mongo_err, client) {
   // 🦄🦄c62  mypage.ejs, middleware로그인확인, passport.deserializeUser, req.user: db의 데이터
   // 👉 up
   // 👉mypage.ejs
-  // 👉login_c58.ejs
+  // 👉login.ejs
 
   console.log('🦄🦄c56,58,60,62')
 
 
   app.get('/login',(req,res)=>{
-    res.render('login_c58.ejs');
+    res.render('login.ejs');
   });
 
   app.get('/login_fail',function (req,res) {
@@ -242,8 +242,8 @@ MongoClient.connect(url, function(mongo_err, client) {
   // 🍀c60-30) passport.authenticate('local',~)...로그인 성공시, 다음코드 실행됨
   passport.use(new LocalStrategy(
     {
-    usernameField:'id',             // 👉login_c58.ejs
-    passwordField:'pw',            // 👉login_c58.ejs
+    usernameField:'id',             // 👉login.ejs
+    passwordField:'pw',            // 👉login.ejs
     session: true,                       // login 후 session을 저장할것인지?
     passReqToCallback:false,
     },
@@ -291,7 +291,7 @@ MongoClient.connect(url, function(mongo_err, client) {
   app.get("/mypage",loginCheck, function (req, res) {
     console.log((`/mypage : req.user`).bgYellow)
     console.log(req.user)  
-    res.render('mypage_62.ejs',{ig_mypage유저정보: req.user})
+    res.render('mypage.ejs',{ig_mypage유저정보: req.user})
   });
 
   //🥒62-50. loginCheck
@@ -322,9 +322,9 @@ MongoClient.connect(url, function(mongo_err, client) {
   // 👉mongoDB사이트  collection 👉 index
   // 👉 mongoDB사이트...search index탭 
 
-    app.get('/search_c70',(req,res)=>{
+    app.get('/search',(req,res)=>{
 
-      console.log(('get./search_c70').bgBrightMagenta)
+      console.log(('get./search').bgBrightMagenta)
       console.log(req.query.value)
 
       //  🍀70-15) .find(pipeline).toArray()
@@ -355,19 +355,19 @@ MongoClient.connect(url, function(mongo_err, client) {
       db.collection('post').aggregate(pipeline).toArray((err,p_db)=>{
         console.log(p_db)  
   
-        res.render('search_c70.ejs',{ig_posts:p_db});
+        res.render('search.ejs',{ig_posts:p_db});
       })       
     });
 
 
     //🦄🦄 72 회원 기능...게시판 기능, req.body._id, req.user._id 
-    // 👉./views/register_c72.ejs
+    // 👉./views/register.ejs
     // 👉./views/list.ejs
     
 
 
-    app.get('/register_c72', (req,res)=>{
-      res.render('register_c72.ejs')
+    app.get('/register', (req,res)=>{
+      res.render('register.ejs')
 
     });
     
@@ -387,14 +387,14 @@ MongoClient.connect(url, function(mongo_err, client) {
 
 
     // 🍀write할때, 로그인 한 작성자도 추가하기 : passport~~~ 코드 밑에 코딩해야함
-    // 👉register_c72.ejs
+    // 👉register.ejs
     app.post('/add_c72',function (req,res) {    
       
       console.log((`app.post('/add_c72'`).bgBrightMagenta)  
       console.log(req.body)
       console.log(req.body.ig_title)
 
-      res.render('register_c72.ejs')
+      res.render('register.ejs')
 
 
       /* 

@@ -9,7 +9,7 @@
 </head>
 <body>       
 
-    <%- include('./nav_c50.html') %>  
+    <%- include('./nav.html') %>  
    
     <h1 class="title-page">./views/list.ejs</h1>
 
@@ -106,7 +106,7 @@
       $('#search').click(function () {          
           var ig_search_input값 = $('#search-input').val()
 
-          window.location.replace(`/search_c70?value=${ig_search_input값}`)        
+          window.location.replace(`/search?value=${ig_search_input값}`)        
       })
   </script>
 </body>
