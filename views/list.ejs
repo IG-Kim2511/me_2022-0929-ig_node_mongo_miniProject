@@ -24,7 +24,7 @@
       </div>
     
       <br>
-      <section>       
+      <section class="list-container">       
           <!-- 🦄c34. 🍀reverse.forEach적용하기 -->
           
           <% ig_posts.slice().reverse().forEach(function(item) {     %>  
@@ -36,14 +36,16 @@
               
               <!-- 🍀c42 -->
               <!-- 👉js 42 -->
-              <button class="myBtn delete" data-id="<%= item._id %>">Delete</button>
-              
-              <!-- 👉js 72 -->
-              <!-- <button class="myBtn delete_c72" data-id="<%= item._id %>">delete_c72</button> -->
-      
-              <!-- 🍀c48 href="http://localhost:3000/detail/<%= item._id %>"-->
-              
-              <a class="myBtn detail"  data-id="<%= item._id %>" href="/detail/<%= item._id %>">Detail page</a>              
+              <div class="btn-container">
+                <button class="myBtn delete" data-id="<%= item._id %>">Delete</button>
+                
+                <!-- 👉js 72 -->
+                <!-- <button class="myBtn delete_c72" data-id="<%= item._id %>">delete_c72</button> -->
+        
+                <!-- 🍀c48 href="http://localhost:3000/detail/<%= item._id %>"-->
+                
+                <a class="myBtn detail"  data-id="<%= item._id %>" href="/detail/<%= item._id%>">Detail page</a>    
+              </div>          
             </div>
           <%  })  %>    
 

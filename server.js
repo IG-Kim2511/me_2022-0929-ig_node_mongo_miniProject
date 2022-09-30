@@ -196,7 +196,7 @@ MongoClient.connect(url, function(mongo_err, client) {
 
     console.log(res.body)
 
-    db.collection('post').updateOne({_id:parseInt(req.body.ig_id)},{$set:{title: req.body.ig_title, date: req.body.ig_date}},function (p_err, p_res) {
+    db.collection('post').updateOne({_id:parseInt(req.body.ig_id)},{$set:{title: req.body.ig_title, date: req.body.ig_date, desc: req.body.ig_desc}},function (p_err, p_res) {
       console.log('ig- update- fin')
 
       // 🍀redirect     
