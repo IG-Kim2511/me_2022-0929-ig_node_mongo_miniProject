@@ -59,7 +59,7 @@ let url = process.env.mongoDB_url;
 
 MongoClient.connect(url, function(mongo_err, client) {
   if (mongo_err) throw mongo_err;
-  console.log((`ig-Database created!`).bgBrightMagenta)
+  console.log((`ig-Database created!`).bgMagenta)
 
   let db = client.db('db0929')
 
@@ -127,7 +127,7 @@ MongoClient.connect(url, function(mongo_err, client) {
   // 🍀c42, delete
   app.delete('/delete', function (req,res) {
     
-    console.log(`delete`.bgBrightMagenta)
+    console.log(`delete`.bgMagenta)
     console.log(req.body)
 
     /*🍀
@@ -325,7 +325,7 @@ MongoClient.connect(url, function(mongo_err, client) {
 
     app.get('/search',(req,res)=>{
 
-      console.log(('get./search').bgBrightMagenta)
+      console.log(('get./search').bgMagenta)
       console.log(req.query.value)
 
       //  🍀70-15) .find(pipeline).toArray()
@@ -375,7 +375,7 @@ MongoClient.connect(url, function(mongo_err, client) {
     //🍀register post하기 : passport~~~ 코드 밑에 코딩해야함
     app.post('/register_post', (req,res)=>{
       
-      console.log(colors.bgBrightMagenta('register_post'))
+      console.log(colors.bgMagenta('register_post'))
       console.log(req.body.id)
 
       // 🍉insertOne({id:req.body.id, pw:req.body.pw}, : post로 넘어온 req.body.~ 데이터 저장
@@ -391,7 +391,7 @@ MongoClient.connect(url, function(mongo_err, client) {
     // 👉register.ejs
     app.post('/add_c72',function (req,res) {    
       
-      console.log((`app.post('/add_c72'`).bgBrightMagenta)  
+      console.log((`app.post('/add_c72'`).bgMagenta)  
       console.log(req.body)
       console.log(req.body.ig_title)
 
@@ -441,7 +441,7 @@ MongoClient.connect(url, function(mongo_err, client) {
 
     // 👉🍀c18, listen
     app.listen(process.env.PORT, function () {
-        console.log((`bgBrightMagenta`).bgBrightMagenta)
+        console.log((`bgMagenta`).bgMagenta)
         console.log(`ig node server gogo, port: ${process.env.PORT}`.rainbow);
         
     });
