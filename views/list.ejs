@@ -1,115 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= meta_title %></title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>       
+<h1 class="title-page">./views/list.ejs</h1>
 
-    <%- include('./nav.html') %>  
-   
-    <h1 class="title-page">./views/list.ejs</h1>
-
-      <br><br>
+<br><br>
 
 
-      <div>
-        <h2>mongodb search index</h2>
-        <input type="text" id="search-input">
-        <!-- 👉js 66 -->
-        <button id="search" class="myBtn">search</button>
-      </div>
+<div>
+  <h2>mongodb search index</h2>
+  <input type="text" id="search-input">
+  <!-- 👉js 66 -->
+  <button id="search" class="myBtn">search</button>
+</div>
+
+<br>
+<section class="list-container">       
+    <!-- 🦄c34. 🍀reverse.forEach적용하기 -->
     
-      <br>
-      <section class="list-container">       
-          <!-- 🦄c34. 🍀reverse.forEach적용하기 -->
-          
-          <% ig_posts.slice().reverse().forEach(function(item) {     %>  
-            <div class="list">
-              <h2>id: <%= item._id %></h2>
-              <h2>Title : <%= item.title %></h2>
-              <p>Date : <%= item.date %></p> 
-              <p>Description : <%= item.desc %>  </p> 
-              
-              <!-- 🍀c42 -->
-              <!-- 👉js 42 -->
-              <div class="btn-container">
-                <button class="myBtn delete" data-id="<%= item._id %>">Delete</button>
-                
-                <!-- 👉js 72 -->
-                <!-- <button class="myBtn delete_c72" data-id="<%= item._id %>">delete_c72</button> -->
+    <% ig_posts.slice().reverse().forEach(function(item) {     %>  
+      <div class="list">
+        <h2>id: <%= item._id %></h2>
+        <h2>Title : <%= item.title %></h2>
+        <p>Date : <%= item.date %></p> 
+        <p>Description : <%= item.desc %>  </p> 
         
-                <!-- 🍀c48 href="http://localhost:3000/detail/<%= item._id %>"-->
-                
-                <a class="myBtn detail"  data-id="<%= item._id %>" href="/detail/<%= item._id%>">Detail page</a>    
-              </div>          
-            </div>
-          <%  })  %>    
+        <!-- 🍀c42 -->
+        <!-- 👉js 42 -->
+        <div class="btn-container">
+          <button class="myBtn delete" data-id="<%= item._id %>">Delete</button>
+          
+          <!-- 👉js 72 -->
+          <!-- <button class="myBtn delete_c72" data-id="<%= item._id %>">delete_c72</button> -->
+  
+          <!-- 🍀c48 href="http://localhost:3000/detail/<%= item._id %>"-->
+          
+          <a class="myBtn detail"  data-id="<%= item._id %>" href="/detail/<%= item._id%>">Detail page</a>    
+        </div>          
+      </div>
+    <%  })  %>    
 
-      </section>
+</section>
 
 <!-- 🦄🦄c42,44,46, AJAX로 DELETE 요청하기 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script>
 
-  // 🦄c41
-    $('.delete').click((e)=>{           
+// 🦄c41
+$('.delete').click((e)=>{           
 
-        // 🍀44
-        $.ajax({
-          method: "DELETE",
-          url: "/delete",
-          data: {_id: e.target.dataset.id}
-          
-        }).done(function() {
-          
-          $(this).parent('div').fadeOut();
-          location.reload();
-        
-          console.log('ig delete success - list.js')
-        }).fail(function (jqXHR, textStatus) {                  //👉c46-40)
-
-        console.log('c44, delete-fail')
-        console.log( "Request failed: " + textStatus );   
-        });
-    });
-
-
-    // 🦄c72
-    $('.delete_c72').click((e)=>{
-        $.ajax({
-          method: "DELETE",
-          url: "/delete_c72",
-          data: {_id: e.target.dataset.id}
-          
-        }).done(function() {
-          
-          $(this).parent('div').fadeOut();
-          location.reload();
-
-          console.log('ig delete success - list.js')
-        }).fail(function (jqXHR, textStatus) {                  
-
-        console.log('c44, delete-fail')
-        console.log( "Request failed: " + textStatus );   
-        });
-     });
+  // 🍀44
+  $.ajax({
+    method: "DELETE",
+    url: "/delete",
+    data: {_id: e.target.dataset.id}
     
+  }).done(function() {
+    
+    $(this).parent('div').fadeOut();
+    location.reload();
+  
+    console.log('ig delete success - list.js')
+  }).fail(function (jqXHR, textStatus) {                  //👉c46-40)
+
+  console.log('c44, delete-fail')
+  console.log( "Request failed: " + textStatus );   
+  });
+});
 
 
-    //🦄🦄c66
-    //🍀c66-10). search기능 만들기, query string 만듬 (Query string parameters)
+// 🦄c72
+$('.delete_c72').click((e)=>{
+  $.ajax({
+    method: "DELETE",
+    url: "/delete_c72",
+    data: {_id: e.target.dataset.id}
+    
+  }).done(function() {
+    
+    $(this).parent('div').fadeOut();
+    location.reload();
 
-    // 🍉
-      $('#search').click(function () {          
-          var ig_search_input값 = $('#search-input').val()
+    console.log('ig delete success - list.js')
+  }).fail(function (jqXHR, textStatus) {                  
 
-          window.location.replace(`/search?value=${ig_search_input값}`)        
-      })
-  </script>
-</body>
-</html>
+  console.log('c44, delete-fail')
+  console.log( "Request failed: " + textStatus );   
+  });
+});
+
+
+
+//🦄🦄c66
+//🍀c66-10). search기능 만들기, query string 만듬 (Query string parameters)
+
+// 🍉
+$('#search').click(function () {          
+    var ig_search_input값 = $('#search-input').val()
+
+    window.location.replace(`/search?value=${ig_search_input값}`)        
+})
+</script>

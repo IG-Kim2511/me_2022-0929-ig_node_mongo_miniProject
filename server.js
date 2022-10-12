@@ -20,6 +20,12 @@ let MongoClient = require('mongodb').MongoClient;
 // let ejs = require('ejs'); 
 app.set('view engine','ejs')
 
+// layout ejs
+var expressLayouts = require('express-ejs-layouts');
+app.use(expressLayouts);
+app.set('layout', 'layouts/main_ejs_layout');
+
+
 // c50)
 app.use(express.static('public'))
 
